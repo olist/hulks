@@ -1,0 +1,7 @@
+-r requirements.txt
+coverage
+pre-commit
+pytest
+pytest-cov
+ipdb
+ipython

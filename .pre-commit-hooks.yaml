@@ -1,0 +1,15 @@
+- id: check-invalid-domains
+  entry: check-invalid-domains
+  name: hulks.check_invalid_domains
+  language: python
+
+- id: check-filename
+  entry: check-filename
+  name: hulks.check_filename
+  language: python
+
+- id: check-logger
+  entry: check-logger
+  name: hulks.check_logger
+  language:  python
+  types: [python]
