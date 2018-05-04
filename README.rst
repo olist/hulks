@@ -2,6 +2,9 @@
 hulks
 =====
 
+|CI Build Status|
+
+----
 
 Olist custom pre-commit plugins
 
@@ -104,3 +107,4 @@ Create the proper tags with::
 .. _pre-commit-documentation: https://pre-commit.com/#new-hooks
 .. _pre_commit_hooks_file:  https://github.com/olist/hulks/blob/master/.pre-commit-hooks.yaml
 .. _semver: https://semver.org/
+.. |CI Build Status| image:: https://circleci.com/gh/olist/hulks.svg?style=svg
