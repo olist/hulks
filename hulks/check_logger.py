@@ -17,6 +17,9 @@ class CheckLoggerHook(BaseHook):
             if 'getLogger(' not in line:
                 continue
 
+            if line.startswith((' ', '\t')):
+                continue
+
             matcher = re.search(pattern, line)
             if not matcher:
                 self._show_error_message(filename, lino)

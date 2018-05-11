@@ -44,3 +44,19 @@ def test_check_logger_validate_pass(capsys, hook, text):
     assert hook.lines_iterator.called_once_with('whatever.txt')
     assert output == ''
     assert result is True
+
+
+@pytest.mark.parametrize('indentation', ('\t', ' ', ' ' * 4, ' ' * 8))
+def test_check_logger_validate_logger_inside_block_pass(capsys, hook, indentation):
+    lines = [
+        'def my_custom_logger(log_name):',
+        indentation + 'return logger.getLogger(log_name)',
+    ]
+    hook.lines_iterator = mock.Mock(
+        return_value=enumerate(lines, start=1),
+    )
+    result = hook.validate('whatever.txt')
+    output, _ = capsys.readouterr()
+    assert hook.lines_iterator.called_once_with('whatever.txt')
+    assert output == ''
+    assert result is True
