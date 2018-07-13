@@ -9,7 +9,7 @@
   language: python
 
 - id: check-django-migrations-filename
-  entry: check_django_migrations_filename
+  entry: check-django-migrations-filename
   name: hulks.check_django_migrations_filename
   language: python
 
