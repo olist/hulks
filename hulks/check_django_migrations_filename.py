@@ -8,7 +8,6 @@ class DjangoMigrationFilenameHook(BaseHook):
     MIGRATIONS_FILES_PATTERN = r'.*[0-9]{4}_\w+_[0-9]{8}_[0-9]{4}.py$'
 
     def validate(self, filename, **options):
-
         pattern = self.MIGRATIONS_FILES_PATTERN
         if re.match(pattern, filename):
             print(f'{filename}: invalid migration filename')
