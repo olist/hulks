@@ -1,11 +1,11 @@
 import pytest
 
-from hulks.check_django_migrations_filename import DjangoMigrationHook
+from hulks.check_django_migrations_filename import DjangoMigrationFilenameHook
 
 
 @pytest.fixture
 def hook():
-    return DjangoMigrationHook()
+    return DjangoMigrationFilenameHook()
 
 
 @pytest.mark.parametrize(

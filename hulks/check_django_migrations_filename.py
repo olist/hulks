@@ -4,7 +4,7 @@ import sys
 from hulks.base import BaseHook
 
 
-class DjangoMigrationHook(BaseHook):
+class DjangoMigrationFilenameHook(BaseHook):
     MIGRATIONS_FILES_PATTERN = r'.*[0-9]{4}_\w+_[0-9]{8}_[0-9]{4}.py$'
 
     def validate(self, filename, **options):
@@ -18,7 +18,7 @@ class DjangoMigrationHook(BaseHook):
 
 
 def main(args=None):
-    hook = DjangoMigrationHook()
+    hook = DjangoMigrationFilenameHook()
     sys.exit(hook.handle(args))
 
 
