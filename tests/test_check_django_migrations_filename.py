@@ -19,7 +19,7 @@ def hook():
         'houses/migrations/0004_auto_20190315_0043.py',
     ]
 )
-def test_migration_filename_validate(filename, capsys, hook):
+def test_migration_filename_invalid(filename, capsys, hook):
     result = hook.validate(filename)
 
     output, _ = capsys.readouterr()
@@ -27,3 +27,20 @@ def test_migration_filename_validate(filename, capsys, hook):
     assert filename in output
     assert 'invalid migration filename' in output
     assert result is False
+
+
+@pytest.mark.parametrize(
+    'filename',
+    [
+        'core/migrations/0002_CreateUserAdmin.py',
+        'core/migrations/0003_UpdateUserAdmin.py',
+        'core/migrations/0004_RemoveAvatarField.py',
+        'core/migrations/0004_RemoveAvatarField.py',
+        'houses/migrations/0004_CreateZipCodeField.py',
+
+    ]
+)
+def test_migration_filename_valid(filename, capsys, hook):
+    result = hook.validate(filename)
+
+    assert result is True
