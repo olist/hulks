@@ -6,7 +6,6 @@ from hulks.base import BaseHook
 
 class DjangoMigrationHook(BaseHook):
     MIGRATIONS_FILES_PATTERN = r'.*[0-9]{4}_\w+_[0-9]{8}_[0-9]{4}.py$'
-    # pattern example 0002_auto_20180315_0043.py
 
     def validate(self, filename, **options):
 
