@@ -11,19 +11,18 @@ class DjangoMigrationFilenameHook(BaseHook):
 
     def validate(self, filename, **options):
         filepath = Path(filename)
-        valid = True
 
         if re.match(self.MIGRATIONS_DEFAULT_FILES_PATTERN, filepath.name):
             msg = 'invalid migration filename, default django name detected'
             print(f'{filename}: {msg}')
-            valid = False
+            return False
 
         if re.match(self.CAMEL_CASE_PATTERN, filepath.name):
             msg = 'invalid migration filename, camel case detected'
             print(f'{filename}: {msg}')
-            valid = False
+            return False
 
-        return valid
+        return True
 
 
 def main(args=None):
