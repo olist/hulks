@@ -21,7 +21,6 @@ def hook():
 )
 def test_migration_filename_default_invalid(filename, capsys, hook):
     result = hook.validate(filename)
-
     output, _ = capsys.readouterr()
 
     assert filename in output
@@ -37,12 +36,10 @@ def test_migration_filename_default_invalid(filename, capsys, hook):
         'core/migrations/0004_RemoveAvatarField.py',
         'core/migrations/0004_RemoveAvatarPicture.py',
         'houses/migrations/0004_CreateZipCodeField.py',
-
     ]
 )
 def test_migration_filename_camel_case_invalid(filename, capsys, hook):
     result = hook.validate(filename)
-
     output, _ = capsys.readouterr()
 
     assert filename in output
@@ -58,7 +55,6 @@ def test_migration_filename_camel_case_invalid(filename, capsys, hook):
         'core/migrations/0004_remove_avatar_field.py',
         'core/migrations/0004_remove_avatar_picture.py',
         'houses/migrations/0004_create_zip_code_field.py',
-
     ]
 )
 def test_migration_filename_valid(filename, capsys, hook):
