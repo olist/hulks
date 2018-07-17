@@ -24,6 +24,7 @@ class DjangoMigrationFilenameHook(BaseHook):
             msg = 'invalid migration filename, camel case detected'
             print(f'{filename}: {msg}')
             valid = False
+
         return valid
 
 
