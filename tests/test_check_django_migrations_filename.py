@@ -35,7 +35,8 @@ def test_migration_filename_default_invalid(filename, capsys, hook):
         'core/migrations/0003_UpdateUserAdmin.py',
         'core/migrations/0004_RemoveAvatarField.py',
         'core/migrations/0004_RemoveAvatarPicture.py',
-        'houses/migrations/0004_CreateZipCodeField.py',
+        'houses/migrations/0004_createZipCodeField.py',
+        'houses/migrations/0005_lowerCamelCase.py',
     ]
 )
 def test_migration_filename_camel_case_invalid(filename, capsys, hook):

@@ -7,7 +7,7 @@ from hulks.base import BaseHook
 
 class DjangoMigrationFilenameHook(BaseHook):
     MIGRATIONS_DEFAULT_FILES_PATTERN = r'.*\d{4}_\w+_\d{8}_\d{4}'
-    CAMEL_CASE_PATTERN = r'^\d{4}_[A-Z][a-z0-9]+[A-z][a-z]+'
+    CAMEL_CASE_PATTERN = r'^\d{4}_([A-Z]|[a-z])+[A-Z]+'
 
     def validate(self, filename, **options):
         filepath = Path(filename)
