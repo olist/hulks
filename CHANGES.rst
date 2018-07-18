@@ -2,6 +2,12 @@ Changelog
 ---------
 
 
+0.1.0
+~~~~~
+
+* Add new hook for defaults django migrations filename
+
+
 0.0.2
 ~~~~~
 

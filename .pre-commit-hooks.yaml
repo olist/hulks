@@ -8,6 +8,11 @@
   name: hulks.check_filename
   language: python
 
+- id: check-django-migrations-filename
+  entry: check-django-migrations-filename
+  name: hulks.check_django_migrations_filename
+  language: python
+
 - id: check-logger
   entry: check-logger
   name: hulks.check_logger
