@@ -13,19 +13,18 @@ class DjangoMigrationFilenameHook(BaseHook):
         filepath = Path(filename)
 
         if re.match(self.MIGRATIONS_DEFAULT_FILES_PATTERN, filepath.name):
-            msg = 'invalid migration filename, default django name detected'
-            print(f'{filename}: {msg}')
+            print('{}: {}'.format(filename, 'invalid migration filename, default django name detected'))
             return False
 
         if re.match(self.CAMEL_CASE_PATTERN, filepath.name):
-            msg = 'invalid migration filename, camel case detected'
-            print(f'{filename}: {msg}')
+            print('{}: {}'.format(filename, 'invalid migration filename, camel case detected' ))
             return False
 
         return True
 
 
 def main(args=None):
+    """Checks if django migrations files are named correctly"""
     hook = DjangoMigrationFilenameHook()
     sys.exit(hook.handle(args))
 
