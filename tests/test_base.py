@@ -59,6 +59,17 @@ def test_base_handle_failure(hook):
     assert mock_validate.call_count == 3
 
 
+def test_base_handle_multiple_failure(hook):
+    mock_validate = mock.Mock(side_effect=lambda filename: filename != 'file01.txt')
+    hook.validate = mock_validate
+
+    args = ['file01.txt', 'another/file02.txt', 'file03.txt']
+
+    result = hook.handle(args)
+    assert result == SO_ERROR
+    assert mock_validate.call_count == 3
+
+
 def test_base_handle_calls(hook):
     hook.validate = mock.Mock(return_value=True)
     result = hook.handle(['foobar.txt'])

@@ -20,7 +20,8 @@ class BaseHook:
         retval = True
 
         for filename in args.filenames:
-            retval = retval and self.validate(filename, **cmd_options)
+            last_retval = self.validate(filename, **cmd_options)
+            retval = last_retval and retval
 
         return int(not retval)
 
