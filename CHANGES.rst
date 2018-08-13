@@ -2,6 +2,12 @@ Changelog
 ---------
 
 
+0.1.1
+~~~~~
+
+* Bugfix: validate all files, even after the first failure
+* Replace the usage of fstrings until we have a good reason for 3.6-specific feature
+
 0.1.0
 ~~~~~
 
