@@ -5,7 +5,15 @@ from hulks.base import BaseHook
 
 
 class CheckMutableDefaults(BaseHook):
-    _immutable_builtins = ('bool', 'int', 'float', 'tuple', 'str', 'frozenset', 'object')
+    _immutable_builtins = (
+        'bool',
+        'float',
+        'frozenset',
+        'int',
+        'object',
+        'str',
+        'tuple',
+    )
     _ast_mutable_types = (
         ast.List,
         ast.Set,
