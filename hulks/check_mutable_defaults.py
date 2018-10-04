@@ -31,15 +31,17 @@ class CheckMutableDefaults(BaseHook):
 
         return nodes
 
-    def _check_mutable_defaults(self, filename, node):
+    def _check_mutable_value(self, value):
+        conditions = (
+            isinstance(value, self._ast_mutable_types),
+            isinstance(value, ast.Call) and value.func.id not in self._immutable_builtins,
+        )
+        return any(conditions)
+
+    def _check_node_mutability(self, filename, node):
         retval = True
         for default_arg_value in node.args.defaults:
-            conditions = (
-                isinstance(default_arg_value, self._ast_mutable_types),
-                isinstance(default_arg_value, ast.Call) and
-                default_arg_value.func.id not in self._immutable_builtins,
-            )
-            if any(conditions):
+            if self._check_mutable_value(default_arg_value):
                 msg = 'mutable default found: {}:{}:{} ({})'
                 print(msg.format(filename, node.lineno, default_arg_value.col_offset, node.name))
                 retval = False
@@ -51,7 +53,7 @@ class CheckMutableDefaults(BaseHook):
         parsed = ast.parse(open(filename).read(), filename)
         fn_nodes = self._collect_functions_with_defaults(parsed)
         for node in fn_nodes:
-            retval = self._check_mutable_defaults(filename, node)
+            retval = self._check_node_mutability(filename, node)
 
         return retval
 
