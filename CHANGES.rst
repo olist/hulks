@@ -2,6 +2,11 @@ Changelog
 ---------
 
 
+0.2.0
+~~~~~
+
+* Add new hook to check mutable default arguments in function/methods
+
 0.1.1
 ~~~~~
 

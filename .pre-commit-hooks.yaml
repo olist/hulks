@@ -18,3 +18,9 @@
   name: hulks.check_logger
   language:  python
   types: [python]
+
+- id: check-mutable-defaults
+  entry: check-mutable-defaults
+  name: hulks.check_mutable_defaults
+  language: python
+  types: [python]
