@@ -43,6 +43,21 @@ def test_method_with_mutable_default(capsys, hook, mutable_arg):
         assert '(foo)' in output
 
 
+def test_dunder_method_with_mutable_default(capsys, hook):
+    content = """
+    \nclass A:
+        def __init__(self, arg={}):
+            pass
+    """.format([])
+
+    with patch('builtins.open', mock_open(read_data=content)) as mock_file:
+        assert hook.validate('foo.py') is False
+        mock_file.assert_called_once_with('foo.py')
+
+        output, _ = capsys.readouterr()
+        assert '(__init__)' in output
+
+
 def test_immutable_default(capsys, hook):
     content = """
     \ndef foo(arg0='', arg1=1, arg2=None, arg3=tuple(), arg4=object()):
