@@ -23,7 +23,7 @@ class CheckMutableDefaults(BaseHook):
     def _collect_functions_with_defaults(self, tree):
         nodes = []
         for node in ast.walk(tree):
-            if not isinstance(node, ast.FunctionDef):
+            if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 continue
 
             if node.args and node.args.defaults:
