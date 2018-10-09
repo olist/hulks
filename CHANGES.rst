@@ -2,11 +2,15 @@ Changelog
 ---------
 
 
+0.2.3
+~~~~~
+
+* Improve check-mutable-default to verify for mutable elements inside tuples
+
 0.2.2
 ~~~~~
 
 * Fix check-mutable-default to work correctly for modules with many functions and methods
-
 
 0.2.1
 ~~~~~
