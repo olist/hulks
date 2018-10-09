@@ -41,6 +41,23 @@ def test_async_function_with_mutable_default(capsys, hook, content):
         assert '(foo)' in output
 
 
+def test_functions_with_mutable_default(capsys, hook):
+    content = """
+    \ndef foo(arg=[]):
+          pass
+
+    \ndef bar(arg=None):
+        pass
+    """
+
+    with patch('builtins.open', mock_open(read_data=content)) as mock_file:
+        assert hook.validate('foo.py') is False
+        mock_file.assert_called_once_with('foo.py')
+
+        output, _ = capsys.readouterr()
+        assert '(foo)' in output
+
+
 @pytest.mark.parametrize('mutable_arg', ['[]', '{}', 'set()', 'list()', 'dict()', 'ValueError()'])
 def test_method_with_mutable_default(capsys, hook, mutable_arg):
     content = """

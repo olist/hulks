@@ -2,6 +2,12 @@ Changelog
 ---------
 
 
+0.2.2
+~~~~~
+
+* Fix check-mutable-default to work correctly for modules with many functions and methods
+
+
 0.2.1
 ~~~~~
 
