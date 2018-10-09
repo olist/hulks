@@ -28,6 +28,23 @@ def test_function_with_mutable_default(capsys, hook, content):
 
 
 @pytest.mark.parametrize('content', [
+    'def foo(var=(None, [])): pass',
+    'def foo(var=({None, []})): pass',
+    'def foo(var=(None, set())): pass',
+    'def foo(var=(None, list())): pass',
+    'def foo(var=(None, dict())): pass',
+    'def foo(var=(None, TypeError())): pass',
+])
+def test_function_with_nested_mutable_default(hook, content):
+    with patch('builtins.open', mock_open(read_data=content)) as mock_file:
+        assert hook.validate('foo.py') is False
+        mock_file.assert_called_once_with('foo.py')
+
+        # output, _ = capsys.readouterr()
+        # assert '(foo)' in output
+
+
+@pytest.mark.parametrize('content', [
     'async def foo(var=[]): pass',
     '@asyncio.coroutine\ndef foo(var={}): pass',
     '@types.coroutine\ndef foo(var=set()): pass',
