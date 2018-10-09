@@ -49,13 +49,9 @@ class CheckMutableDefaults(BaseHook):
         return retval
 
     def validate(self, filename, **options):
-        retval = True
         parsed = ast.parse(open(filename).read(), filename)
         fn_nodes = self._collect_functions_with_defaults(parsed)
-        for node in fn_nodes:
-            retval = self._check_node_mutability(filename, node)
-
-        return retval
+        return all(self._check_node_mutability(filename, node) for node in fn_nodes)
 
 
 def main(args=None):
