@@ -12,6 +12,11 @@ Changelog
 
 * Fixes config of invalid-domains hook to only check text files
 
+0.2.4
+~~~~~
+
+* Improve check-mutable-default to verify for mutable elements on class attributes
+
 0.2.3
 ~~~~~
 
