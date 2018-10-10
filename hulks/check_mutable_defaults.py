@@ -65,7 +65,7 @@ class CheckMutableDefaults(BaseHook):
 
             nodes += [
                 cls_node for cls_node in node.body
-                if isinstance(cls_node, ast.Assign)
+                if isinstance(cls_node, (ast.AnnAssign, ast.Assign))
             ]
 
         return nodes
@@ -74,7 +74,12 @@ class CheckMutableDefaults(BaseHook):
         retval = True
         if self._check_mutable_value(node.value):
             msg = 'mutable default found: {}:{}:{} ({})'
-            print(msg.format(filename, node.lineno, node.col_offset, node.targets[0].id))
+            try:
+                name = node.targets[0].id
+            except AttributeError:
+                name = node.target.id
+
+            print(msg.format(filename, node.lineno, node.col_offset, name))
             retval = False
 
         return retval

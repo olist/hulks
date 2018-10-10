@@ -172,3 +172,21 @@ def test_class_attribute_with_mutable_default(capsys, hook, mutable_arg):
 
         output, _ = capsys.readouterr()
         assert '(bar)' in output
+
+
+def test_annotated_class_attribute_with_mutable_default(capsys, hook):
+    content = """
+    \nclass A:
+        foo = None
+
+    \nclass B:
+        bar: typing.List[str] = []
+        baz = None
+    """
+
+    with patch('builtins.open', mock_open(read_data=content)) as mock_file:
+        assert hook.validate('foo.py') is False
+        mock_file.assert_called_once_with('foo.py')
+
+        output, _ = capsys.readouterr()
+        assert '(bar)' in output
