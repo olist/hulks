@@ -136,3 +136,39 @@ def test_immutable_default(capsys, hook, prefix):
 
         output, _ = capsys.readouterr()
         assert output == ""
+
+
+def test_class_attribute_with_immutable_default(capsys, hook):
+    content = """
+    \nclass A:
+        foo = None
+
+    \nclass B:
+        baz = None
+    """
+
+    with patch('builtins.open', mock_open(read_data=content)) as mock_file:
+        assert hook.validate('foo.py') is True
+        mock_file.assert_called_once_with('foo.py')
+
+        output, _ = capsys.readouterr()
+        assert output == ""
+
+
+@pytest.mark.parametrize('mutable_arg', ['[]', '{}', 'set()', 'list()', 'dict()', 'ValueError()'])
+def test_class_attribute_with_mutable_default(capsys, hook, mutable_arg):
+    content = """
+    \nclass A:
+        foo = None
+
+    \nclass B:
+        bar = {}
+        baz = None
+    """.format(mutable_arg)
+
+    with patch('builtins.open', mock_open(read_data=content)) as mock_file:
+        assert hook.validate('foo.py') is False
+        mock_file.assert_called_once_with('foo.py')
+
+        output, _ = capsys.readouterr()
+        assert '(bar)' in output

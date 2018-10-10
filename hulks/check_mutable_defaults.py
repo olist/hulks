@@ -43,7 +43,7 @@ class CheckMutableDefaults(BaseHook):
         )
         return any(conditions)
 
-    def _check_node_mutability(self, filename, node):
+    def _check_function_node_mutability(self, filename, node):
         retval = True
         for default_arg_value in node.args.defaults:
             if self._check_mutable_value(default_arg_value):
@@ -53,10 +53,39 @@ class CheckMutableDefaults(BaseHook):
 
         return retval
 
+    def _check_functions(self, parsed, filename):
+        fn_nodes = self._collect_functions_with_defaults(parsed)
+        return all(self._check_function_node_mutability(filename, node) for node in fn_nodes)
+
+    def _collect_class_attributes(self, tree):
+        nodes = []
+        for node in ast.walk(tree):
+            if not isinstance(node, ast.ClassDef):
+                continue
+
+            nodes += [
+                cls_node for cls_node in node.body
+                if isinstance(cls_node, ast.Assign)
+            ]
+
+        return nodes
+
+    def _check_assign_node_mutability(self, filename, node):
+        retval = True
+        if self._check_mutable_value(node.value):
+            msg = 'mutable default found: {}:{}:{} ({})'
+            print(msg.format(filename, node.lineno, node.col_offset, node.targets[0].id))
+            retval = False
+
+        return retval
+
+    def _check_classes(self, parsed, filename):
+        cls_nodes = self._collect_class_attributes(parsed)
+        return all(self._check_assign_node_mutability(filename, node) for node in cls_nodes)
+
     def validate(self, filename, **options):
         parsed = ast.parse(open(filename).read(), filename)
-        fn_nodes = self._collect_functions_with_defaults(parsed)
-        return all(self._check_node_mutability(filename, node) for node in fn_nodes)
+        return self._check_functions(parsed, filename) and self._check_classes(parsed, filename)
 
 
 def main(args=None):
