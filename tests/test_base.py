@@ -130,5 +130,6 @@ def test_lines_iterator_skips_binary_files(hook_iterator, capsys):
         mocked_open.return_value = BytesIO(b'\x89PNG\r\n\x1a\n')
         result = hook_iterator.handle(['whatever.png'])
 
+    assert result == SO_SUCCESS
     output, _ = capsys.readouterr()
     assert not output
