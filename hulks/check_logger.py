@@ -6,6 +6,8 @@ from hulks.base import BaseHook
 
 class CheckLoggerHook(BaseHook):
 
+    CHECK_BINARY_FILES = False
+
     def _show_error_message(self, filename, line_number):
         msg = '{}, line={}: preferably logger should be set with __name__'
         print(msg.format(filename, line_number))

@@ -1,4 +1,4 @@
-from io import StringIO
+from io import BytesIO, StringIO
 from unittest import mock
 
 import pytest
@@ -17,6 +17,8 @@ def hook():
 @pytest.fixture
 def hook_iterator():
     class _TestHook(BaseHook):
+
+        CHECK_BINARY_FILES = False
 
         def validate(self, filename):
             lines = ''.join(line for _, line in self.lines_iterator(filename))
@@ -121,3 +123,12 @@ def test_lines_iterator_noqa(hook_iterator, capsys):
     assert lines[0] == 'more text'
     assert lines[1] == ''
     assert result is True
+
+
+def test_lines_iterator_skips_binary_files(hook_iterator, capsys):
+    with mock.patch('hulks.base.open') as mocked_open:
+        mocked_open.return_value = BytesIO(b'\x89PNG\r\n\x1a\n')
+        result = hook_iterator.handle(['whatever.png'])
+
+    output, _ = capsys.readouterr()
+    assert not output
