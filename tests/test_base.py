@@ -129,12 +129,10 @@ def test_lines_iterator_noqa(hook_iterator, capsys):
     assert result is True
 
 
-def test_lines_iterator_prints_filename_on_invalid_files(hook_iterator, capsys):
+def test_lines_iterator_prints_filename_on_invalid_files(hook_iterator):
     with mock.patch('hulks.base.open') as mocked_open:
         mocked_open.return_value = UnicodeErrorRaiserIO(b'This is invalid utf-8:\xfe\xfe!')
         with pytest.raises(UnicodeDecodeError) as excinfo:
             hook_iterator.validate('whatever.png')
 
-    _, err_output = capsys.readouterr()
-    assert 'non-text file' in err_output
     assert "at file 'whatever.png'" in str(excinfo.value)

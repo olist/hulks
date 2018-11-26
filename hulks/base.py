@@ -1,6 +1,4 @@
 import argparse
-import mimetypes
-import sys
 
 
 class BaseHook:
@@ -28,9 +26,6 @@ class BaseHook:
         return int(not retval)
 
     def lines_iterator(self, filename):
-        if not mimetypes.guess_type(filename)[0].startswith('text/'):
-                print(f'[WARNING] Trying to iterate lines of non-text file {filename!r}. '
-                      'Double-check commit-hook configuration!', file=sys.stderr)
         try:
             with open(filename) as fp:
                 for line_number, line in enumerate(fp.readlines(), 1):
@@ -39,5 +34,5 @@ class BaseHook:
                         yield line_number, line
         except UnicodeDecodeError as error:
             *args, reason = error.args
-            reason += f' at file {filename!r}!'
+            reason += ' at file {!r}!'.format(filename)
             raise UnicodeDecodeError(*(args + [reason]))
