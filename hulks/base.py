@@ -2,6 +2,7 @@ import argparse
 import mimetypes
 import sys
 
+
 class BaseHook:
 
     def validate(self, filename, **options):
