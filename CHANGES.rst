@@ -1,10 +1,6 @@
 Changelog
 ---------
 
-0.2.4
-~~~~~
-
-* Add CHECK_BINARY_FILES class attribute to indicate hooks that should skip those
 
 0.2.3
 ~~~~~

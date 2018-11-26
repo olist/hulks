@@ -5,8 +5,6 @@ from hulks.base import BaseHook
 
 class ExampleHook(BaseHook):
 
-    CHECK_BINARY_FILES = False
-
     def validate(self, filename, **options):
         retval = True
         for lino, line in self.lines_iterator(filename):

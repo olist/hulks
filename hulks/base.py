@@ -1,10 +1,7 @@
 import argparse
-import mimetypes
 
 
 class BaseHook:
-
-    CHECK_BINARY_FILES = True
 
     def validate(self, filename, **options):
         raise NotImplementedError()
@@ -23,9 +20,6 @@ class BaseHook:
         retval = True
 
         for filename in args.filenames:
-            if not self.CHECK_BINARY_FILES and \
-                    not mimetypes.guess_type(filename)[0].startswith('text/'):
-                continue
             last_retval = self.validate(filename, **cmd_options)
             retval = last_retval and retval
 

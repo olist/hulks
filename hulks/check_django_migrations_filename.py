@@ -17,7 +17,7 @@ class DjangoMigrationFilenameHook(BaseHook):
             return False
 
         if re.match(self.CAMEL_CASE_PATTERN, filepath.name):
-            print('{}: {}'.format(filename, 'invalid migration filename, camel case detected'))
+            print('{}: {}'.format(filename, 'invalid migration filename, camel case detected' ))
             return False
 
         return True

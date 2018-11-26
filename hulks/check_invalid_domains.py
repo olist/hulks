@@ -4,9 +4,6 @@ from hulks.base import BaseHook
 
 
 class InvalidDomainsHook(BaseHook):
-
-    CHECK_BINARY_FILES = False
-
     INVALID_DOMAINS = [
         '.herokuapp.com'
     ]

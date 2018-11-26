@@ -6,15 +6,13 @@ from hulks.base import BaseHook
 
 class CheckLoggerHook(BaseHook):
 
-    CHECK_BINARY_FILES = False
-
     def _show_error_message(self, filename, line_number):
         msg = '{}, line={}: preferably logger should be set with __name__'
         print(msg.format(filename, line_number))
 
     def validate(self, filename, **options):
         retval = True
-        pattern = re.compile(r'\((.+)\)')
+        pattern = re.compile('\((.+)\)')
         for lino, line in self.lines_iterator(filename):
             if 'getLogger(' not in line:
                 continue
