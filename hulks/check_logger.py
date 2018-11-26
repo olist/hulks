@@ -12,7 +12,7 @@ class CheckLoggerHook(BaseHook):
 
     def validate(self, filename, **options):
         retval = True
-        pattern = re.compile('\((.+)\)')
+        pattern = re.compile(r'\((.+)\)')
         for lino, line in self.lines_iterator(filename):
             if 'getLogger(' not in line:
                 continue
