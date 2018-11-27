@@ -26,13 +26,15 @@ class BaseHook:
         return int(not retval)
 
     def lines_iterator(self, filename):
-        try:
-            with open(filename) as fp:
-                for line_number, line in enumerate(fp.readlines(), 1):
-                    # heuristic, so we dont need to handle all "comment" syntax accross languages
-                    if ' noqa' not in line.lower():
-                        yield line_number, line
-        except UnicodeDecodeError as error:
-            *args, reason = error.args
-            reason += ' at file {!r}!'.format(filename)
-            raise UnicodeDecodeError(*(args + [reason]))
+        with open(filename) as fp:
+            try:
+                lines = list(fp)
+            except UnicodeDecodeError as error:
+                *args, reason = error.args
+                reason += ' at file {!r}!'.format(filename)
+                raise UnicodeDecodeError(*args, reason)
+
+        for line_number, line in enumerate(lines, 1):
+            # heuristic, so we dont need to handle all "comment" syntax accross languages
+            if ' noqa' not in line.lower():
+                yield line_number, line

@@ -14,6 +14,8 @@ class UnicodeErrorRaiserIO(BytesIO):
         for line in super().readlines(*args, **kwargs):
             yield line.decode('utf-8')
 
+    __iter__ = readlines
+
 
 @pytest.fixture
 def hook():
@@ -129,10 +131,10 @@ def test_lines_iterator_noqa(hook_iterator, capsys):
     assert result is True
 
 
-def test_lines_iterator_prints_filename_on_invalid_files(hook_iterator):
-    with mock.patch('hulks.base.open') as mocked_open:
-        mocked_open.return_value = UnicodeErrorRaiserIO(b'This is invalid utf-8:\xfe\xfe!')
-        with pytest.raises(UnicodeDecodeError) as excinfo:
-            hook_iterator.validate('whatever.png')
+@mock.patch('hulks.base.open')
+def test_lines_iterator_prints_filename_on_invalid_files(mocked_open, hook_iterator):
+    mocked_open.return_value = UnicodeErrorRaiserIO(b'This is invalid utf-8:\xfe\xfe!')
+    with pytest.raises(UnicodeDecodeError) as excinfo:
+        hook_iterator.validate('whatever.png')
 
     assert "at file 'whatever.png'" in str(excinfo.value)
