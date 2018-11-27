@@ -2,6 +2,7 @@
   entry: check-invalid-domains
   name: hulks.check_invalid_domains
   language: python
+  types: [text]
 
 - id: check-filename
   entry: check-filename

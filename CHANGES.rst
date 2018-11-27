@@ -1,6 +1,10 @@
 Changelog
 ---------
 
+0.2.4
+~~~~~~
+
+* Fixes config of invalid-domains hook to only check text files
 
 0.2.3
 ~~~~~
