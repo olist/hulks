@@ -1,6 +1,12 @@
 Changelog
 ---------
 
+0.2.5
+~~~~~~
+
+* Improve error handling on invalid text files
+
+
 0.2.4
 ~~~~~~
 

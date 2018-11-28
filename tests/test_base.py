@@ -1,4 +1,4 @@
-from io import StringIO
+from io import BytesIO, StringIO
 from unittest import mock
 
 import pytest
@@ -7,6 +7,14 @@ from hulks.check_filename import BaseHook
 
 SO_ERROR = 1
 SO_SUCCESS = 0
+
+
+class UnicodeErrorRaiserIO(BytesIO):
+    def readlines(self, *args, **kwargs):
+        for line in super().readlines(*args, **kwargs):
+            yield line.decode('utf-8')
+
+    __iter__ = readlines
 
 
 @pytest.fixture
@@ -121,3 +129,12 @@ def test_lines_iterator_noqa(hook_iterator, capsys):
     assert lines[0] == 'more text'
     assert lines[1] == ''
     assert result is True
+
+
+@mock.patch('hulks.base.open')
+def test_lines_iterator_prints_filename_on_invalid_files(mocked_open, hook_iterator):
+    mocked_open.return_value = UnicodeErrorRaiserIO(b'This is invalid utf-8:\xfe\xfe!')
+    with pytest.raises(UnicodeDecodeError) as excinfo:
+        hook_iterator.validate('whatever.png')
+
+    assert "at file 'whatever.png'" in str(excinfo.value)
