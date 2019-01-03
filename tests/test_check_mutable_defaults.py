@@ -136,3 +136,67 @@ def test_immutable_default(capsys, hook, prefix):
 
         output, _ = capsys.readouterr()
         assert output == ""
+
+
+@pytest.mark.parametrize('mutable_arg', ['[]', '{}', 'set()', 'list()', 'dict()', 'ValueError()'])
+def test_class_attribute_with_mutable_default(capsys, hook, mutable_arg):
+    content = """
+    \nclass A:
+        foo = None
+
+    \nclass B:
+        _bar = {0}
+        bar = {0}
+        BAR = {0}
+        baz = None
+    """.format(mutable_arg)
+
+    with patch('builtins.open', mock_open(read_data=content)) as mock_file:
+        assert hook.validate('foo.py') is True
+        mock_file.assert_called_once_with('foo.py')
+
+        output, _ = capsys.readouterr()
+        assert '(bar)' not in output
+        assert '(BAR)' not in output
+        assert '(_bar)' not in output
+
+
+@pytest.mark.parametrize('mutable_arg', ['[]', '{}', 'set()', 'list()', 'dict()', 'ValueError()'])
+def test_strict_class_attribute_with_mutable_default(capsys, hook, mutable_arg):
+    content = """
+    \nclass A:
+        foo = None
+
+    \nclass B:
+        _bar = {0}
+        bar = {0}
+        BAR = {0}
+        baz = None
+    """.format(mutable_arg)
+
+    with patch('builtins.open', mock_open(read_data=content)) as mock_file:
+        assert hook.validate('foo.py', strict=True) is False
+        mock_file.assert_called_once_with('foo.py')
+
+        output, _ = capsys.readouterr()
+        assert '(bar)' in output
+        assert '(BAR)' not in output
+        assert '(_bar)' not in output
+
+
+def test_strict_annotated_class_attribute_with_mutable_default(capsys, hook):
+    content = """
+    \nclass A:
+        foo = None
+
+    \nclass B:
+        bar: typing.List[str] = []
+        baz = None
+    """
+
+    with patch('builtins.open', mock_open(read_data=content)) as mock_file:
+        assert hook.validate('foo.py', strict=True) is False
+        mock_file.assert_called_once_with('foo.py')
+
+        output, _ = capsys.readouterr()
+        assert '(bar)' in output
