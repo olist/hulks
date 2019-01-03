@@ -200,3 +200,22 @@ def test_strict_annotated_class_attribute_with_mutable_default(capsys, hook):
 
         output, _ = capsys.readouterr()
         assert '(bar)' in output
+
+
+def test_class_attribute_as_classmethod_call(capsys, hook):
+    content = """
+    \nclass Foo:
+        @classmethod
+        def foo(cls):
+            pass
+
+    \nclass B:
+        baz = Foo.foo()
+    """
+
+    with patch('builtins.open', mock_open(read_data=content)) as mock_file:
+        assert hook.validate('foo.py') is True
+        mock_file.assert_called_once_with('foo.py')
+
+        output, _ = capsys.readouterr()
+        assert output == ""

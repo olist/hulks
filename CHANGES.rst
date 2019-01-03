@@ -1,6 +1,11 @@
 Changelog
 ---------
 
+0.2.7
+~~~~~
+
+* Fix check-mutable-default check to stop failing when a class attribute receives a classmethod instance
+
 0.2.6
 ~~~~~
 

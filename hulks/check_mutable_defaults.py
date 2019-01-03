@@ -45,16 +45,19 @@ class CheckMutableDefaults(BaseHook):
         return nodes
 
     def _check_mutable_value(self, value):
-        retval = False
-        if isinstance(value, ast.Tuple):
-            retval = any(self._check_mutable_value(elt) for elt in value.elts)
+        if isinstance(value, ast.Tuple) and any(self._check_mutable_value(elt) for elt in value.elts):
+            return True
 
-        conditions = (
-            retval,
-            isinstance(value, self._ast_mutable_types),
-            isinstance(value, ast.Call) and value.func.id not in self._immutable_builtins,
-        )
-        return any(conditions)
+        if isinstance(value, self._ast_mutable_types):
+            return True
+
+        try:
+            return value.func.id not in self._immutable_builtins
+        except AttributeError as exc:
+            if isinstance(value, ast.Call) and not isinstance(value.func, ast.Attribute):
+                raise exc
+
+        return False
 
     def _check_function_node_mutability(self, filename, node):
         retval = True
