@@ -7,7 +7,7 @@ from hulks.base import BaseHook
 class CheckPrintHook(BaseHook):
 
     def _show_error_message(self, filename, line_number):
-        msg = '{}, line={}: there is a print() function, please remove it.'
+        msg = '{}, line={}: call to print found, please remove it.'
         print(msg.format(filename, line_number))
 
     def validate(self, filename, **options):
