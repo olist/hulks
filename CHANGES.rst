@@ -4,7 +4,7 @@ Changelog
 0.3.0
 ~~~~~
 
-* Add new hook to check print statements in classes/methods/functions
+* Add new hook to check print statements in code
 
 0.2.7
 ~~~~~
