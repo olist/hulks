@@ -1,6 +1,11 @@
 Changelog
 ---------
 
+0.4.0
+~~~~~
+
+* Add new hook to check default django migration comment
+
 0.3.0
 ~~~~~
 

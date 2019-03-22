@@ -31,3 +31,9 @@
   name: hulks.check_print
   language: python
   types: [python]
+
+- id: check-default-commentary-django-migration
+  entry: check-default-commentary-django-migration
+  name: hulks.check_default_commentary_django_migration
+  language: python
+  types: [python]
