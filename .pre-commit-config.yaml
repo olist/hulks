@@ -1,6 +1,6 @@
 repos:
 -   repo: git@github.com:pre-commit/pre-commit-hooks
-    rev: v1.4.0
+    rev: v2.2.1
     hooks:
     - id: debug-statements
     - id: trailing-whitespace
@@ -40,6 +40,12 @@ repos:
       types: [python]
 
 -   repo: https://github.com/pre-commit/mirrors-isort
-    rev: v4.3.4
+    rev: v4.3.19
     hooks:
     - id: isort
+    args: ['--check-only', '--diff']
+
+- repo: https://github.com/pre-commit/pygrep-hooks
+  rev: v1.4.0
+  hooks:
+    - id: python-check-mock-methods
