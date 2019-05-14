@@ -23,7 +23,7 @@ def test_check_logger_validate_error(capsys, hook, text):
     result = hook.validate('whatever.txt')
 
     output, _ = capsys.readouterr()
-    assert hook.lines_iterator.called_once_with('whatever.txt')
+    hook.lines_iterator.assert_called_once_with('whatever.txt')
     assert output.startswith('whatever.txt')
     assert 'line=1' in output
     assert result is False
@@ -41,7 +41,7 @@ def test_check_logger_validate_pass(capsys, hook, text):
     )
     result = hook.validate('whatever.txt')
     output, _ = capsys.readouterr()
-    assert hook.lines_iterator.called_once_with('whatever.txt')
+    hook.lines_iterator.assert_called_once_with('whatever.txt')
     assert output == ''
     assert result is True
 
@@ -57,6 +57,6 @@ def test_check_logger_validate_logger_inside_block_pass(capsys, hook, indentatio
     )
     result = hook.validate('whatever.txt')
     output, _ = capsys.readouterr()
-    assert hook.lines_iterator.called_once_with('whatever.txt')
+    hook.lines_iterator.assert_called_once_with('whatever.txt')
     assert output == ''
     assert result is True

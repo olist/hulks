@@ -3,5 +3,7 @@ coverage
 pre-commit
 pytest
 pytest-cov
+pytest-deadfixtures
+pytest-randomly
 ipdb
 ipython

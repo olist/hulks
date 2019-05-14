@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/python:3.6.5
+      - image: circleci/python:3.7.3
 
     working_directory: ~/repo
 
@@ -25,17 +25,33 @@ jobs:
             - /home/circleci/.local/share/virtualenvs/
           key: v1-dependencies-{{ checksum "CHANGES.rst" }}
 
+      - restore_cache:
+          name: "Restoring hooks cache"
+          key: v1-hooks-{{ checksum ".pre-commit-config.yaml" }}
+
       - run:
           name: linters
           command: |
             . venv/bin/activate
             SKIP=no-commit-to-branch pre-commit run -a -v
 
+      - save_cache:
+          name: "Saving hooks cache"
+          paths:
+            - "~/.cache/pre-commit/"
+          key: v1-hooks-{{ checksum ".pre-commit-config.yaml" }}
+
       - run:
           name: run tests
           command: |
             . venv/bin/activate
-            py.test -vv -s --cov hulks --cov-report=term-missing --cov-report=html
+            pytest -vv -s --cov hulks --cov-report=term-missing --cov-report=html
+
+      - run:
+          name: dead-fixtures-check
+          command: |
+            . venv/bin/activate
+            pytest --dead-fixtures
 
       - store_artifacts:
           path: htmlcov
