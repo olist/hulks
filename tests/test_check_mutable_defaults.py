@@ -10,53 +10,62 @@ def hook():
     return CheckMutableDefaults()
 
 
-@pytest.mark.parametrize('content', [
-    'def foo(var=[]): pass',
-    'def foo(var={}): pass',
-    'def foo(var=set()): pass',
-    'def foo(var=list()): pass',
-    'def foo(var=dict()): pass',
-    'def foo(var=TypeError()): pass',
-])
+@pytest.mark.parametrize(
+    "content",
+    [
+        "def foo(var=[]): pass",
+        "def foo(var={}): pass",
+        "def foo(var=set()): pass",
+        "def foo(var=list()): pass",
+        "def foo(var=dict()): pass",
+        "def foo(var=TypeError()): pass",
+    ],
+)
 def test_function_with_mutable_default(capsys, hook, content):
-    with patch('builtins.open', mock_open(read_data=content)) as mock_file:
-        assert hook.validate('foo.py') is False
-        mock_file.assert_called_once_with('foo.py')
+    with patch("builtins.open", mock_open(read_data=content)) as mock_file:
+        assert hook.validate("foo.py") is False
+        mock_file.assert_called_once_with("foo.py")
 
         output, _ = capsys.readouterr()
-        assert '(foo)' in output
+        assert "(foo)" in output
 
 
-@pytest.mark.parametrize('content', [
-    'def foo(var=(None, [])): pass',
-    'def foo(var=({None, []})): pass',
-    'def foo(var=(None, set())): pass',
-    'def foo(var=(None, list())): pass',
-    'def foo(var=(None, dict())): pass',
-    'def foo(var=(None, TypeError())): pass',
-])
+@pytest.mark.parametrize(
+    "content",
+    [
+        "def foo(var=(None, [])): pass",
+        "def foo(var=({None, []})): pass",
+        "def foo(var=(None, set())): pass",
+        "def foo(var=(None, list())): pass",
+        "def foo(var=(None, dict())): pass",
+        "def foo(var=(None, TypeError())): pass",
+    ],
+)
 def test_function_with_nested_mutable_default(capsys, hook, content):
-    with patch('builtins.open', mock_open(read_data=content)) as mock_file:
-        assert hook.validate('foo.py') is False
+    with patch("builtins.open", mock_open(read_data=content)) as mock_file:
+        assert hook.validate("foo.py") is False
 
-    mock_file.assert_called_once_with('foo.py')
+    mock_file.assert_called_once_with("foo.py")
 
     output, _ = capsys.readouterr()
-    assert '(foo)' in output
+    assert "(foo)" in output
 
 
-@pytest.mark.parametrize('content', [
-    'async def foo(var=[]): pass',
-    '@asyncio.coroutine\ndef foo(var={}): pass',
-    '@types.coroutine\ndef foo(var=set()): pass',
-])
+@pytest.mark.parametrize(
+    "content",
+    [
+        "async def foo(var=[]): pass",
+        "@asyncio.coroutine\ndef foo(var={}): pass",
+        "@types.coroutine\ndef foo(var=set()): pass",
+    ],
+)
 def test_async_function_with_mutable_default(capsys, hook, content):
-    with patch('builtins.open', mock_open(read_data=content)) as mock_file:
-        assert hook.validate('foo.py') is False
-        mock_file.assert_called_once_with('foo.py')
+    with patch("builtins.open", mock_open(read_data=content)) as mock_file:
+        assert hook.validate("foo.py") is False
+        mock_file.assert_called_once_with("foo.py")
 
         output, _ = capsys.readouterr()
-        assert '(foo)' in output
+        assert "(foo)" in output
 
 
 def test_functions_with_mutable_default(capsys, hook):
@@ -68,28 +77,30 @@ def test_functions_with_mutable_default(capsys, hook):
         pass
     """
 
-    with patch('builtins.open', mock_open(read_data=content)) as mock_file:
-        assert hook.validate('foo.py') is False
-        mock_file.assert_called_once_with('foo.py')
+    with patch("builtins.open", mock_open(read_data=content)) as mock_file:
+        assert hook.validate("foo.py") is False
+        mock_file.assert_called_once_with("foo.py")
 
         output, _ = capsys.readouterr()
-        assert '(foo)' in output
+        assert "(foo)" in output
 
 
-@pytest.mark.parametrize('mutable_arg', ['[]', '{}', 'set()', 'list()', 'dict()', 'ValueError()'])
+@pytest.mark.parametrize("mutable_arg", ["[]", "{}", "set()", "list()", "dict()", "ValueError()"])
 def test_method_with_mutable_default(capsys, hook, mutable_arg):
     content = """
     \nclass A:
         def foo(self, arg={}):
             pass
-    """.format(mutable_arg)
+    """.format(
+        mutable_arg
+    )
 
-    with patch('builtins.open', mock_open(read_data=content)) as mock_file:
-        assert hook.validate('foo.py') is False
-        mock_file.assert_called_once_with('foo.py')
+    with patch("builtins.open", mock_open(read_data=content)) as mock_file:
+        assert hook.validate("foo.py") is False
+        mock_file.assert_called_once_with("foo.py")
 
         output, _ = capsys.readouterr()
-        assert '(foo)' in output
+        assert "(foo)" in output
 
 
 def test_dunder_method_with_mutable_default(capsys, hook):
@@ -97,48 +108,54 @@ def test_dunder_method_with_mutable_default(capsys, hook):
     \nclass A:
         def __init__(self, arg={}):
             pass
-    """.format([])
+    """.format(
+        []
+    )
 
-    with patch('builtins.open', mock_open(read_data=content)) as mock_file:
-        assert hook.validate('foo.py') is False
-        mock_file.assert_called_once_with('foo.py')
+    with patch("builtins.open", mock_open(read_data=content)) as mock_file:
+        assert hook.validate("foo.py") is False
+        mock_file.assert_called_once_with("foo.py")
 
         output, _ = capsys.readouterr()
-        assert '(__init__)' in output
+        assert "(__init__)" in output
 
 
-@pytest.mark.parametrize('mutable_arg', ['[]', '{}', 'set()', 'list()', 'dict()', 'ValueError()'])
+@pytest.mark.parametrize("mutable_arg", ["[]", "{}", "set()", "list()", "dict()", "ValueError()"])
 def test_async_method_with_mutable_default(capsys, hook, mutable_arg):
     content = """
     \nclass A:
         async def foo(self, arg={}):
             pass
-    """.format(mutable_arg)
+    """.format(
+        mutable_arg
+    )
 
-    with patch('builtins.open', mock_open(read_data=content)) as mock_file:
-        assert hook.validate('foo.py') is False
-        mock_file.assert_called_once_with('foo.py')
+    with patch("builtins.open", mock_open(read_data=content)) as mock_file:
+        assert hook.validate("foo.py") is False
+        mock_file.assert_called_once_with("foo.py")
 
         output, _ = capsys.readouterr()
-        assert '(foo)' in output
+        assert "(foo)" in output
 
 
-@pytest.mark.parametrize('prefix', ['', 'async ', '@asyncio.coroutine\n'])
+@pytest.mark.parametrize("prefix", ["", "async ", "@asyncio.coroutine\n"])
 def test_immutable_default(capsys, hook, prefix):
     content = """
     \n{}def foo(arg0='', arg1=1, arg2=None, arg3=tuple(), arg4=object()):
         pass
-    """.format(prefix)
+    """.format(
+        prefix
+    )
 
-    with patch('builtins.open', mock_open(read_data=content)) as mock_file:
-        assert hook.validate('foo.py') is True
-        mock_file.assert_called_once_with('foo.py')
+    with patch("builtins.open", mock_open(read_data=content)) as mock_file:
+        assert hook.validate("foo.py") is True
+        mock_file.assert_called_once_with("foo.py")
 
         output, _ = capsys.readouterr()
         assert output == ""
 
 
-@pytest.mark.parametrize('mutable_arg', ['[]', '{}', 'set()', 'list()', 'dict()', 'ValueError()'])
+@pytest.mark.parametrize("mutable_arg", ["[]", "{}", "set()", "list()", "dict()", "ValueError()"])
 def test_class_attribute_with_mutable_default(capsys, hook, mutable_arg):
     content = """
     \nclass A:
@@ -149,19 +166,21 @@ def test_class_attribute_with_mutable_default(capsys, hook, mutable_arg):
         bar = {0}
         BAR = {0}
         baz = None
-    """.format(mutable_arg)
+    """.format(
+        mutable_arg
+    )
 
-    with patch('builtins.open', mock_open(read_data=content)) as mock_file:
-        assert hook.validate('foo.py') is True
-        mock_file.assert_called_once_with('foo.py')
+    with patch("builtins.open", mock_open(read_data=content)) as mock_file:
+        assert hook.validate("foo.py") is True
+        mock_file.assert_called_once_with("foo.py")
 
         output, _ = capsys.readouterr()
-        assert '(bar)' not in output
-        assert '(BAR)' not in output
-        assert '(_bar)' not in output
+        assert "(bar)" not in output
+        assert "(BAR)" not in output
+        assert "(_bar)" not in output
 
 
-@pytest.mark.parametrize('mutable_arg', ['[]', '{}', 'set()', 'list()', 'dict()', 'ValueError()'])
+@pytest.mark.parametrize("mutable_arg", ["[]", "{}", "set()", "list()", "dict()", "ValueError()"])
 def test_strict_class_attribute_with_mutable_default(capsys, hook, mutable_arg):
     content = """
     \nclass A:
@@ -172,16 +191,18 @@ def test_strict_class_attribute_with_mutable_default(capsys, hook, mutable_arg):
         bar = {0}
         BAR = {0}
         baz = None
-    """.format(mutable_arg)
+    """.format(
+        mutable_arg
+    )
 
-    with patch('builtins.open', mock_open(read_data=content)) as mock_file:
-        assert hook.validate('foo.py', strict=True) is False
-        mock_file.assert_called_once_with('foo.py')
+    with patch("builtins.open", mock_open(read_data=content)) as mock_file:
+        assert hook.validate("foo.py", strict=True) is False
+        mock_file.assert_called_once_with("foo.py")
 
         output, _ = capsys.readouterr()
-        assert '(bar)' in output
-        assert '(BAR)' not in output
-        assert '(_bar)' not in output
+        assert "(bar)" in output
+        assert "(BAR)" not in output
+        assert "(_bar)" not in output
 
 
 def test_strict_annotated_class_attribute_with_mutable_default(capsys, hook):
@@ -194,12 +215,12 @@ def test_strict_annotated_class_attribute_with_mutable_default(capsys, hook):
         baz = None
     """
 
-    with patch('builtins.open', mock_open(read_data=content)) as mock_file:
-        assert hook.validate('foo.py', strict=True) is False
-        mock_file.assert_called_once_with('foo.py')
+    with patch("builtins.open", mock_open(read_data=content)) as mock_file:
+        assert hook.validate("foo.py", strict=True) is False
+        mock_file.assert_called_once_with("foo.py")
 
         output, _ = capsys.readouterr()
-        assert '(bar)' in output
+        assert "(bar)" in output
 
 
 def test_class_attribute_as_classmethod_call(capsys, hook):
@@ -213,9 +234,9 @@ def test_class_attribute_as_classmethod_call(capsys, hook):
         baz = Foo.foo()
     """
 
-    with patch('builtins.open', mock_open(read_data=content)) as mock_file:
-        assert hook.validate('foo.py') is True
-        mock_file.assert_called_once_with('foo.py')
+    with patch("builtins.open", mock_open(read_data=content)) as mock_file:
+        assert hook.validate("foo.py") is True
+        mock_file.assert_called_once_with("foo.py")
 
         output, _ = capsys.readouterr()
         assert output == ""

@@ -5,19 +5,18 @@ from hulks.base import BaseHook
 
 
 class CheckLoggerHook(BaseHook):
-
     def _show_error_message(self, filename, line_number):
-        msg = '{}, line={}: preferably logger should be set with __name__'
+        msg = "{}, line={}: preferably logger should be set with __name__"
         print(msg.format(filename, line_number))
 
     def validate(self, filename, **options):
         retval = True
-        pattern = re.compile(r'\((.+)\)')
+        pattern = re.compile(r"\((.+)\)")
         for lino, line in self.lines_iterator(filename):
-            if 'getLogger(' not in line:
+            if "getLogger(" not in line:
                 continue
 
-            if line.startswith((' ', '\t')):
+            if line.startswith((" ", "\t")):
                 continue
 
             matcher = re.search(pattern, line)
@@ -30,7 +29,7 @@ class CheckLoggerHook(BaseHook):
             for mt in matches:
                 if mt.startswith("'") or mt.startswith('"'):
                     continue
-                if mt == '__name__':
+                if mt == "__name__":
                     continue
 
                 self._show_error_message(filename, lino)
@@ -46,5 +45,5 @@ def main(args=None):
     sys.exit(hook.handle(args))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main(sys.argv[1:])

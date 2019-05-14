@@ -6,23 +6,23 @@ from setuptools import Command, find_packages, setup
 
 here = os.path.abspath(os.path.dirname(__file__))
 
-version = '0.0.1'
-changes = os.path.join(here, 'CHANGES.rst')
-match = r'^#*\s*(?P<version>[0-9]+\.[0-9]+(\.[0-9]+)?)$'
-with codecs.open(changes, encoding='utf-8') as changes:
+version = "0.0.1"
+changes = os.path.join(here, "CHANGES.rst")
+match = r"^#*\s*(?P<version>[0-9]+\.[0-9]+(\.[0-9]+)?)$"
+with codecs.open(changes, encoding="utf-8") as changes:
     for line in changes:
         res = re.match(match, line)
         if res:
-            version = res.group('version')
+            version = res.group("version")
             break
 
 
 # Get the long description
-with codecs.open(os.path.join(here, 'README.rst'), encoding='utf-8') as f:
+with codecs.open(os.path.join(here, "README.rst"), encoding="utf-8") as f:
     long_description = f.read()
 
 # Get requirements.txt
-with codecs.open(os.path.join(here, 'requirements.txt')) as f:
+with codecs.open(os.path.join(here, "requirements.txt")) as f:
     install_requires = []
     for line in f:
         requirement = line.split("#", 1)[0].strip()
@@ -36,7 +36,7 @@ with codecs.open(os.path.join(here, 'requirements.txt')) as f:
 
 
 class VersionCommand(Command):
-    description = 'print library version'
+    description = "print library version"
     user_options = []
 
     def initialize_options(self):
@@ -50,7 +50,7 @@ class VersionCommand(Command):
 
 
 class EntryPointsCommand(Command):
-    description = 'display entry points'
+    description = "display entry points"
     user_options = []
 
     def initialize_options(self):
@@ -61,46 +61,41 @@ class EntryPointsCommand(Command):
 
     @classmethod
     def get_entry_points(cls):
-        hooks = open('.pre-commit-hooks.yaml').readlines()
+        hooks = open(".pre-commit-hooks.yaml").readlines()
         entry_points = []
         for hook in hooks:
-            if 'id:' in hook:
-                entry_points.append({'entry': hook.split(':')[-1].strip()})
+            if "id:" in hook:
+                entry_points.append({"entry": hook.split(":")[-1].strip()})
 
-            if 'name:' in hook:
-                entry_points[-1]['name'] = hook.split(':')[-1].strip()
+            if "name:" in hook:
+                entry_points[-1]["name"] = hook.split(":")[-1].strip()
 
-        return ['{entry} = {name}:main'.format(**ep) for ep in entry_points]
+        return ["{entry} = {name}:main".format(**ep) for ep in entry_points]
 
     def run(self):
-        print('\n'.join(self.get_entry_points()))
+        print("\n".join(self.get_entry_points()))
 
 
 setup(
-    name='hulks',
+    name="hulks",
     version=version,
-    description='Olist custom linting hooks',
+    description="Olist custom linting hooks",
     long_description=long_description,
-    url='https://github.com/olist/hulks',
-    author='Olist Developers',
-    author_email='developers@olist.com',
+    url="https://github.com/olist/hulks",
+    author="Olist Developers",
+    author_email="developers@olist.com",
     classifiers=[
-        'Development Status :: 4 - Beta',
-        'Intended Audience :: Developers',
-        'Natural Language :: English',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.6',
-        'Topic :: Software Development :: Libraries',
-        'Topic :: Software Development :: Pre-processors',
-        'Topic :: Software Development :: Testing',
+        "Development Status :: 4 - Beta",
+        "Intended Audience :: Developers",
+        "Natural Language :: English",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.6",
+        "Topic :: Software Development :: Libraries",
+        "Topic :: Software Development :: Pre-processors",
+        "Topic :: Software Development :: Testing",
     ],
-    packages=find_packages(exclude=['tests*']),
+    packages=find_packages(exclude=["tests*"]),
     install_requires=install_requires,
-    entry_points={
-        'console_scripts': EntryPointsCommand.get_entry_points(),
-    },
-    cmdclass={
-        'version': VersionCommand,
-        'show_hooks': EntryPointsCommand,
-    },
+    entry_points={"console_scripts": EntryPointsCommand.get_entry_points()},
+    cmdclass={"version": VersionCommand, "show_hooks": EntryPointsCommand},
 )

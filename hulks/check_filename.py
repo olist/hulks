@@ -6,25 +6,25 @@ from hulks.base import BaseHook
 
 
 class FilenameHook(BaseHook):
-    DIRECTORY_PATTERN = r'^[\w\-\.]+$'
-    DEFAULT_FILES_PATTERN = r'^[\w\-\.]+$'
-    PYTHON_FILES_PATTERN = r'^[\w]+$'
-    WEB_FILES_PATTERN = r'^[A-Za-z0-9\-\.]+$'
+    DIRECTORY_PATTERN = r"^[\w\-\.]+$"
+    DEFAULT_FILES_PATTERN = r"^[\w\-\.]+$"
+    PYTHON_FILES_PATTERN = r"^[\w]+$"
+    WEB_FILES_PATTERN = r"^[A-Za-z0-9\-\.]+$"
 
     def _validate_path(self, pattern, path):
         return re.match(pattern, path) is not None
 
     def _validate_directory(self, name):
-        if name == '':
+        if name == "":
             return True
 
         return self._validate_path(self.DIRECTORY_PATTERN, name)
 
     def _validate_filename(self, suffix, stem):
         pattern = self.DEFAULT_FILES_PATTERN
-        if suffix == '.py':
+        if suffix == ".py":
             pattern = self.PYTHON_FILES_PATTERN
-        elif suffix in ('.html', '.htm', '.css', '.js'):
+        elif suffix in (".html", ".htm", ".css", ".js"):
             pattern = self.WEB_FILES_PATTERN
 
         return self._validate_path(pattern, stem)
@@ -38,7 +38,7 @@ class FilenameHook(BaseHook):
                 return False
 
         if not self._validate_filename(file_path.suffix, file_path.stem):
-            print('{}: invalid filename'.format(filename))
+            print("{}: invalid filename".format(filename))
             return False
 
         return True
@@ -50,5 +50,5 @@ def main(args=None):
     return sys.exit(hook.handle(args))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main(sys.argv[1:])
