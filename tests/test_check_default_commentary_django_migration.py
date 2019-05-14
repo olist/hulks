@@ -17,7 +17,7 @@ def test_invalid_migrations_comment_validate(capsys, hook):
     result = hook.validate('0002_carrier_active.py')
 
     output, _ = capsys.readouterr()
-    assert hook.lines_iterator.called_once_with('0002_carrier_active.py')
+    hook.lines_iterator.assert_called_once_with('0002_carrier_active.py')
     assert output.startswith('0002_carrier_active.py')
     assert 'line=1' in output
     assert 'column=3' in output
@@ -30,6 +30,6 @@ def test_invalid_migrations_comment_validate_unmatch(capsys, hook):
     )
     result = hook.validate('0002_carrier_active.py')
     output, _ = capsys.readouterr()
-    assert hook.lines_iterator.called_once_with('0002_carrier_active.py')
+    hook.lines_iterator.assert_called_once_with('0002_carrier_active.py')
     assert output == ''
     assert result is True

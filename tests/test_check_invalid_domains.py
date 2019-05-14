@@ -17,7 +17,7 @@ def test_invalid_domains_validate(capsys, hook):
     result = hook.validate('whatever.txt')
 
     output, _ = capsys.readouterr()
-    assert hook.lines_iterator.called_once_with('whatever.txt')
+    hook.lines_iterator.assert_called_once_with('whatever.txt')
     assert output.startswith('whatever.txt')
     assert 'line=1' in output
     assert 'column=1' in output
@@ -30,6 +30,6 @@ def test_invalid_domains_validate_unmatch(capsys, hook):
     )
     result = hook.validate('whatever.txt')
     output, _ = capsys.readouterr()
-    assert hook.lines_iterator.called_once_with('whatever.txt')
+    hook.lines_iterator.assert_called_once_with('whatever.txt')
     assert output == ''
     assert result is True
