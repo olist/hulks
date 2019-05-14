@@ -49,7 +49,9 @@ jobs:
 
       - run:
           name: dead-fixtures-check
-          command: pytest --dead-fixtures
+          command: |
+            . venv/bin/activate
+            pytest --dead-fixtures
 
       - store_artifacts:
           path: htmlcov
