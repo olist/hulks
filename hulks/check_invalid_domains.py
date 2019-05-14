@@ -4,9 +4,7 @@ from hulks.base import BaseHook
 
 
 class InvalidDomainsHook(BaseHook):
-    INVALID_DOMAINS = [
-        '.herokuapp.com'
-    ]
+    INVALID_DOMAINS = [".herokuapp.com"]
 
     def validate(self, filename):
         result = True
@@ -15,7 +13,7 @@ class InvalidDomainsHook(BaseHook):
                 if invalid_domain in line:
                     print(
                         '{}: found "{}" line={}, column={}'.format(
-                            filename, invalid_domain, i, line.index(invalid_domain) + 1,
+                            filename, invalid_domain, i, line.index(invalid_domain) + 1
                         )
                     )
                     result = False
@@ -29,5 +27,5 @@ def main(args=None):
     sys.exit(hook.handle(args))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main(sys.argv[1:])

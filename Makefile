@@ -15,10 +15,13 @@ clean-build:
 	@rm -fr *.egg-info
 
 test:
-	py.test -x
+	pytest -x
 
 lint:
-	pre-commit run -a -v
+	pre-commit install && pre-commit run -a -v
+
+pyformat:
+	black hulks tests
 
 release: test
 	git tag `python setup.py -q version`

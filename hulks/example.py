@@ -4,13 +4,12 @@ from hulks.base import BaseHook
 
 
 class ExampleHook(BaseHook):
-
     def validate(self, filename, **options):
         retval = True
         for lino, line in self.lines_iterator(filename):
-            if 'batman' in line:
-                found = 'line={}, col={}'.format(lino, line.index('batman') + 1)
-                print('{}: entrei na feira da fruta...'.format(found))
+            if "batman" in line:
+                found = "line={}, col={}".format(lino, line.index("batman") + 1)
+                print("{}: entrei na feira da fruta...".format(found))
                 retval = False
                 break
 
@@ -23,5 +22,5 @@ def main(args=None):
     sys.exit(hook.handle(args))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main(sys.argv[1:])

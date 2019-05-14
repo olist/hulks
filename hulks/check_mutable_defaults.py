@@ -5,20 +5,8 @@ from hulks.base import BaseHook
 
 
 class CheckMutableDefaults(BaseHook):
-    _immutable_builtins = (
-        'bool',
-        'float',
-        'frozenset',
-        'int',
-        'object',
-        'str',
-        'tuple',
-    )
-    _ast_mutable_types = (
-        ast.List,
-        ast.Set,
-        ast.Dict,
-    )
+    _immutable_builtins = ("bool", "float", "frozenset", "int", "object", "str", "tuple")
+    _ast_mutable_types = (ast.List, ast.Set, ast.Dict)
 
     def _collect_functions_with_defaults(self, tree):
         nodes = []
@@ -37,10 +25,7 @@ class CheckMutableDefaults(BaseHook):
             if not isinstance(node, ast.ClassDef):
                 continue
 
-            nodes += [
-                cls_node for cls_node in node.body
-                if isinstance(cls_node, (ast.AnnAssign, ast.Assign))
-            ]
+            nodes += [cls_node for cls_node in node.body if isinstance(cls_node, (ast.AnnAssign, ast.Assign))]
 
         return nodes
 
@@ -63,7 +48,7 @@ class CheckMutableDefaults(BaseHook):
         retval = True
         for default_arg_value in node.args.defaults:
             if self._check_mutable_value(default_arg_value):
-                msg = 'mutable default found: {}:{}:{} ({})'
+                msg = "mutable default found: {}:{}:{} ({})"
                 print(msg.format(filename, node.lineno, default_arg_value.col_offset, node.name))
                 retval = False
 
@@ -88,10 +73,10 @@ class CheckMutableDefaults(BaseHook):
         if isinstance(name, bytes):
             name = name.decode()
 
-        if name.isupper() or name.startswith('_'):
+        if name.isupper() or name.startswith("_"):
             return True
 
-        msg = 'mutable default found: {}:{}:{} ({})'
+        msg = "mutable default found: {}:{}:{} ({})"
         print(msg.format(filename, node.lineno, node.col_offset, name))
         return False
 
@@ -100,7 +85,7 @@ class CheckMutableDefaults(BaseHook):
         return all(self._check_assign_node_mutability(filename, node) for node in cls_nodes)
 
     def validate(self, filename, **options):
-        self.strict = options.get('strict', False)
+        self.strict = options.get("strict", False)
         parsed = ast.parse(open(filename).read(), filename)
         return self._check_classes(parsed, filename) and self._check_functions(parsed, filename)
 
@@ -111,5 +96,5 @@ def main(args=None):
     sys.exit(hook.handle(args))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main(sys.argv[1:])
