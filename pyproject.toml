@@ -1,3 +1,13 @@
 [tool.black]
 line-length = 110
 target-version = ['py37']
+
+[tool.isort]
+line_length = 110
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+known_localfolder = "hulks,tests"
+sections = "FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
+default_section= "THIRDPARTY"
