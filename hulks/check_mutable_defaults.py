@@ -3,11 +3,16 @@ import sys
 
 from hulks.base import BaseHook
 
+_immutable_builtins = ("bool", "float", "frozenset", "int", "object", "str", "tuple")
+_ast_mutable_types = (ast.List, ast.Set, ast.Dict)
+try:
+    _assigns = (ast.AnnAssign, ast.Assign)
+except AttributeError:
+    # AnnAssign only exists on python>=3.6
+    _assigns = (ast.Assign,)
+
 
 class CheckMutableDefaults(BaseHook):
-    _immutable_builtins = ("bool", "float", "frozenset", "int", "object", "str", "tuple")
-    _ast_mutable_types = (ast.List, ast.Set, ast.Dict)
-
     def _collect_functions_with_defaults(self, tree):
         nodes = []
         for node in ast.walk(tree):
@@ -25,7 +30,7 @@ class CheckMutableDefaults(BaseHook):
             if not isinstance(node, ast.ClassDef):
                 continue
 
-            nodes += [cls_node for cls_node in node.body if isinstance(cls_node, (ast.AnnAssign, ast.Assign))]
+            nodes += [cls_node for cls_node in node.body if isinstance(cls_node, _assigns)]
 
         return nodes
 
@@ -33,11 +38,11 @@ class CheckMutableDefaults(BaseHook):
         if isinstance(value, ast.Tuple) and any(self._check_mutable_value(elt) for elt in value.elts):
             return True
 
-        if isinstance(value, self._ast_mutable_types):
+        if isinstance(value, _ast_mutable_types):
             return True
 
         try:
-            return value.func.id not in self._immutable_builtins
+            return value.func.id not in _immutable_builtins
         except AttributeError as exc:
             if isinstance(value, ast.Call) and not isinstance(value.func, ast.Attribute):
                 raise exc
