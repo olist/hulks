@@ -1,3 +1,4 @@
+import sys
 from unittest.mock import mock_open, patch
 
 import pytest
@@ -205,6 +206,7 @@ def test_strict_class_attribute_with_mutable_default(capsys, hook, mutable_arg):
         assert "(_bar)" not in output
 
 
+@pytest.mark.skipif(sys.version_info < (3, 6), reason="requires python3.6 or higher")
 def test_strict_annotated_class_attribute_with_mutable_default(capsys, hook):
     content = """
     \nclass A:

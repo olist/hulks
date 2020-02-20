@@ -1,6 +1,11 @@
 Changelog
 ---------
 
+0.4.1
+~~~~~
+
+* Fix check mutable defaults hook to work on python < 3.6
+
 0.4.0
 ~~~~~
 
