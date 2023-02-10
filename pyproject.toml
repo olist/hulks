@@ -1,3 +1,7 @@
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
 [tool.black]
 line-length = 110
 target-version = ['py37']
@@ -15,3 +19,47 @@ default_section = "THIRDPARTY"
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-vv --cov-report=term-missing --cov=hulks"
+
+[tool.poetry]
+name = "hulks"
+version = "0.4.2"
+description = "Olist custom linting hooks"
+readme = "README.rst"
+authors = ["Olist Developers <developers@olist.com>"]
+repository = "https://github.com/olist/hulks"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development :: Pre-processors",
+    "Topic :: Software Development :: Testing",
+]
+include = [{ path = "tests", format = "sdist" }]
+
+[tool.poetry.scripts]
+check-invalid-domains = "hulks.check_invalid_domains:main"
+check-filename = "hulks.check_filename:main"
+check-django-migrations-filename = "hulks.check_django_migrations_filename:main"
+check-logger = "hulks.check_logger:main"
+check-mutable-defaults = "hulks.check_mutable_defaults:main"
+check-print = "hulks.check_print:main"
+check-default-commentary-django-migration = "hulks.check_default_commentary_django_migration:main"
+
+
+[tool.poetry.dependencies]
+python = "^3.7"
+
+[tool.poetry.group.dev.dependencies]
+coverage = "*"
+pre-commit = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-deadfixtures = "*"
+pytest-randomly = "*"

@@ -1,6 +1,11 @@
 Changelog
 ---------
 
+UNRELEASED
+~~~~~~~~~~
+
+* build: use poetry to manage dependencies
+
 0.4.1
 ~~~~~
 
