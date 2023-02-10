@@ -20,7 +20,7 @@ class CheckPrintHook(BaseHook):
 
 
 def main(args=None):
-    """Checks 'print' usage"""
+    """Check 'print' usage."""
     hook = CheckPrintHook()
     sys.exit(hook.handle(args))
 

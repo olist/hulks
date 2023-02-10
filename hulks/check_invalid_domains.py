@@ -22,7 +22,7 @@ class InvalidDomainsHook(BaseHook):
 
 
 def main(args=None):
-    """Checks file content for invalid domains"""
+    """Check file content for invalid domains."""
     hook = InvalidDomainsHook()
     sys.exit(hook.handle(args))
 

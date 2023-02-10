@@ -45,7 +45,7 @@ class FilenameHook(BaseHook):
 
 
 def main(args=None):
-    """Checks if all file and directory names fit your naming convention"""
+    """Check if all file and directory names fit your naming convention."""
     hook = FilenameHook()
     return sys.exit(hook.handle(args))
 

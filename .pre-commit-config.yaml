@@ -43,6 +43,12 @@ repos:
       - id: pyupgrade
         args: [--py37-plus]
 
+  - repo: https://github.com/PyCQA/pydocstyle
+    rev: 6.3.0
+    hooks:
+      - id: pydocstyle
+        args: [--add-ignore=D1, -e]
+
   - repo: https://github.com/pre-commit/pygrep-hooks
     rev: v1.10.0
     hooks:

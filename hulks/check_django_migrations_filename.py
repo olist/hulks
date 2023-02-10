@@ -24,7 +24,7 @@ class DjangoMigrationFilenameHook(BaseHook):
 
 
 def main(args=None):
-    """Checks if django migrations files are named correctly"""
+    """Check if django migrations files are named correctly."""
     hook = DjangoMigrationFilenameHook()
     sys.exit(hook.handle(args))
 

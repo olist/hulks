@@ -40,7 +40,7 @@ class CheckLoggerHook(BaseHook):
 
 
 def main(args=None):
-    """Checks 'getLogger' usage"""
+    """Check 'getLogger' usage."""
     hook = CheckLoggerHook()
     sys.exit(hook.handle(args))
 

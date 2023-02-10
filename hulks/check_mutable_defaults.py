@@ -96,7 +96,7 @@ class CheckMutableDefaults(BaseHook):
 
 
 def main(args=None):
-    """Check mutable defaults arguments in python code"""
+    """Check mutable defaults arguments in python code."""
     hook = CheckMutableDefaults()
     sys.exit(hook.handle(args))
 

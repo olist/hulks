@@ -19,7 +19,7 @@ class DjangoMigrationCommentary(BaseHook):
 
 
 def main(args=None):
-    """Checks if django migrations files has default commentary"""
+    """Check if django migrations files has default commentary."""
     hook = DjangoMigrationCommentary()
     sys.exit(hook.handle(args))
 
