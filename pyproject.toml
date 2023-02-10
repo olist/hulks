@@ -7,6 +7,8 @@ line-length = 110
 target-version = ['py37']
 
 [tool.isort]
+py_version = 37
+profile = "black"
 line_length = 110
 multi_line_output = 3
 include_trailing_comma = true
