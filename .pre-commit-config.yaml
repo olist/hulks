@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.3.0
+    rev: v4.4.0
     hooks:
       - id: debug-statements
       - id: trailing-whitespace
@@ -12,6 +12,7 @@ repos:
       - id: check-json
       - id: check-symlinks
       - id: check-vcs-permalinks
+      - id: check-toml
       - id: check-xml
       - id: check-yaml
       - id: detect-aws-credentials
@@ -19,8 +20,7 @@ repos:
       - id: detect-private-key
       - id: forbid-new-submodules
       - id: no-commit-to-branch
-      - id: flake8
-        args: ["--exclude=docs/*,*migrations*", "--ignore=E501,W503,E203"]
+      - id: end-of-file-fixer
 
   - repo: local
     hooks:
@@ -30,6 +30,12 @@ repos:
         language: pygrep
         entry: 'datetime\.now\(\)'
         types: [python]
+
+  - repo: https://github.com/PyCQA/flake8
+    rev: 6.0.0
+    hooks:
+      - id: flake8
+        args: ["--ignore=E501,W503,E203"]
 
   - repo: https://github.com/PyCQA/isort
     rev: 5.12.0
