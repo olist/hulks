@@ -34,11 +34,11 @@ class FilenameHook(BaseHook):
 
         for parent in file_path.parents:
             if not self._validate_directory(parent.name):
-                print('{}: invalid dirname at "{}"'.format(filename, parent.name))
+                print(f'{filename}: invalid dirname at "{parent.name}"')
                 return False
 
         if not self._validate_filename(file_path.suffix, file_path.stem):
-            print("{}: invalid filename".format(filename))
+            print(f"{filename}: invalid filename")
             return False
 
         return True
