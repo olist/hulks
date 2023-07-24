@@ -1,7 +1,8 @@
 {
-	"name": "loafer",
-	"image": "mcr.microsoft.com/devcontainers/python:0-3.11",
+	"name": "hulks",
+	"image": "mcr.microsoft.com/devcontainers/python:0-3.7",
 	"features": {
+		"ghcr.io/devcontainers-contrib/features/hatch:2": {},
 		"ghcr.io/devcontainers-contrib/features/pre-commit:2": {}
 	},
 	"customizations": {

@@ -15,10 +15,10 @@ clean-build:
 	@rm -fr *.egg-info
 
 test:
-	pytest -x
+	hatch env run test
 
 lint:
-	pre-commit install && pre-commit run -a -v
+	hatch env run lint
 
 pyformat:
 	black hulks tests
