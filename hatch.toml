@@ -8,3 +8,6 @@ SKIP = "no-commit-to-branch"
 lint = "pre-commit run -a -v"
 test = "pytest -x"
 check-dead-fixtures = "pytest --dead-fixtures"
+
+[[envs.test.matrix]]
+python = ["3.8", "3.9", "3.10", "3.11"]
