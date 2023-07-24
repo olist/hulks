@@ -1,3 +1,42 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "hulks"
+description = "Olist custom linting hooks"
+readme = "README.rst"
+license = { file = "LICENSE" }
+authors = [{ name = "Olist", email = "developers@olist.com" }]
+keywords = ["pre-commit"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.5",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development :: Pre-processors",
+    "Topic :: Software Development :: Testing",
+]
+requires-python = ">=3.7"
+dynamic = ["version"]
+
+[project.urls]
+Repository = "https://github.com/olist/hulks/"
+
+[project.scripts]
+check-default-commentary-django-migration = "hulks.check_default_commentary_django_migration:main"
+check-django-migrations-filename = "hulks.check_django_migrations_filename:main"
+check-filename = "hulks.check_filename:main"
+check-invalid-domains = "hulks.check_invalid_domains:main"
+check-logger = "hulks.check_logger:main"
+check-mutable-defaults = "hulks.check_mutable_defaults:main"
+check-print = "hulks.check_print:main"
+
 [tool.black]
 line-length = 110
 target-version = ['py37']
@@ -10,4 +49,10 @@ force_grid_wrap = 0
 use_parentheses = true
 known_localfolder = "hulks,tests"
 sections = "FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
-default_section= "THIRDPARTY"
+default_section = "THIRDPARTY"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.targets.wheel]
+exclude = ["hulks/example.py"]

@@ -1,0 +1,10 @@
+[envs.default]
+dependencies = ["pre-commit", "pytest", "pytest-cov", "pytest-deadfixtures"]
+
+[envs.default.env-vars]
+SKIP = "no-commit-to-branch"
+
+[envs.default.scripts]
+lint = "pre-commit run -a -v"
+test = "pytest -x"
+check-dead-fixtures = "pytest --dead-fixtures"
