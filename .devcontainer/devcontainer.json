@@ -1,6 +1,6 @@
 {
 	"name": "hulks",
-	"image": "mcr.microsoft.com/devcontainers/python:0-3.7",
+	"image": "mcr.microsoft.com/devcontainers/python:0-3.8",
 	"features": {
 		"ghcr.io/devcontainers-contrib/features/hatch:2": {},
 		"ghcr.io/devcontainers-contrib/features/pre-commit:2": {}
@@ -13,6 +13,7 @@
 				"ms-python.flake8",
 				"ms-python.isort",
 				"ms-python.python",
+				"redhat.vscode-yaml",
 				"tamasfe.even-better-toml"
 			],
 			"settings": {

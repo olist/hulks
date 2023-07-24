@@ -9,7 +9,7 @@ class ExampleHook(BaseHook):
         for lino, line in self.lines_iterator(filename):
             if "batman" in line:
                 found = "line={}, col={}".format(lino, line.index("batman") + 1)
-                print("{}: entrei na feira da fruta...".format(found))
+                print(f"{found}: entrei na feira da fruta...")
                 retval = False
                 break
 
