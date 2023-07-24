@@ -39,16 +39,13 @@ check-print = "hulks.check_print:main"
 
 [tool.black]
 line-length = 110
-target-version = ['py37']
+target-version = ["py38", "py39", "py310", "py311"]
 
 [tool.isort]
+profile = "black"
 line_length = 110
-multi_line_output = 3
-include_trailing_comma = true
-force_grid_wrap = 0
-use_parentheses = true
-known_localfolder = "hulks,tests"
-sections = "FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
+known_localfolder = ["hulks", "tests"]
+sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
 default_section = "THIRDPARTY"
 
 [tool.hatch.version]

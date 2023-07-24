@@ -30,7 +30,7 @@ class BaseHook:
                 lines = list(fp)
             except UnicodeDecodeError as error:
                 *args, reason = error.args
-                reason += " at file {!r}!".format(filename)
+                reason += f" at file {filename!r}!"
                 raise UnicodeDecodeError(*args, reason)
 
         for line_number, line in enumerate(lines, 1):
