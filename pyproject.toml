@@ -52,4 +52,8 @@ default_section = "THIRDPARTY"
 source = "vcs"
 
 [tool.hatch.build.targets.wheel]
-exclude = ["hulks/example.py"]
+packages = ["src/hulks"]
+exclude = ["src/hulks/example.py"]
+
+[tool.hatch.build.targets.sdist]
+exclude = ["/.github"]
