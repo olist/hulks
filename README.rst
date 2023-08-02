@@ -19,7 +19,7 @@ as follows:
 
     repos:
       - repo: git@github.com:olist/hulks.git
-      rev: master
+      rev: main
       hooks:
         - id: check-invalid-domains
 
@@ -105,6 +105,6 @@ Create the proper tags with::
 
 .. _instructions: https://pre-commit.com/#developing-hooks-interactively
 .. _pre-commit-documentation: https://pre-commit.com/#new-hooks
-.. _pre_commit_hooks_file:  https://github.com/olist/hulks/blob/master/.pre-commit-hooks.yaml
+.. _pre_commit_hooks_file:  https://github.com/olist/hulks/blob/main/.pre-commit-hooks.yaml
 .. _semver: https://semver.org/
 .. |CI Build Status| image:: https://github.com/olist/hulks/actions/workflows/test.yml/badge.svg
