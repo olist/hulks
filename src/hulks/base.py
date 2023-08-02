@@ -1,9 +1,11 @@
 import argparse
+from abc import ABC, abstractmethod
 
 
-class BaseHook:
+class BaseHook(ABC):
+    @abstractmethod
     def validate(self, filename, **options):
-        raise NotImplementedError()
+        pass
 
     def add_arguments(self, parser):
         pass
