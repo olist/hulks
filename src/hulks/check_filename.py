@@ -1,26 +1,27 @@
 import re
 import sys
 from pathlib import Path
+from typing import Any, Dict, Final, NoReturn, Optional, Sequence
 
 from hulks.base import BaseHook
 
 
 class FilenameHook(BaseHook):
-    DIRECTORY_PATTERN = r"^[\w\-\.]+$"
-    DEFAULT_FILES_PATTERN = r"^[\w\-\.]+$"
-    PYTHON_FILES_PATTERN = r"^[\w]+$"
-    WEB_FILES_PATTERN = r"^[A-Za-z0-9\-\.]+$"
+    DIRECTORY_PATTERN: Final[str] = r"^[\w\-\.]+$"
+    DEFAULT_FILES_PATTERN: Final[str] = r"^[\w\-\.]+$"
+    PYTHON_FILES_PATTERN: Final[str] = r"^[\w]+$"
+    WEB_FILES_PATTERN: Final[str] = r"^[A-Za-z0-9\-\.]+$"
 
-    def _validate_path(self, pattern, path):
+    def _validate_path(self, pattern: str, path: str) -> bool:
         return re.match(pattern, path) is not None
 
-    def _validate_directory(self, name):
+    def _validate_directory(self, name: str) -> bool:
         if name == "":
             return True
 
         return self._validate_path(self.DIRECTORY_PATTERN, name)
 
-    def _validate_filename(self, suffix, stem):
+    def _validate_filename(self, suffix: str, stem: str) -> bool:
         pattern = self.DEFAULT_FILES_PATTERN
         if suffix == ".py":
             pattern = self.PYTHON_FILES_PATTERN
@@ -29,7 +30,7 @@ class FilenameHook(BaseHook):
 
         return self._validate_path(pattern, stem)
 
-    def validate(self, filename):
+    def validate(self, filename: str, **options: Dict[str, Any]) -> bool:
         file_path = Path(filename)
 
         for parent in file_path.parents:
@@ -44,10 +45,10 @@ class FilenameHook(BaseHook):
         return True
 
 
-def main(args=None):
+def main(args: Optional[Sequence[str]] = None) -> NoReturn:
     """Checks if all file and directory names fit your naming convention"""
     hook = FilenameHook()
-    return sys.exit(hook.handle(args))
+    sys.exit(hook.handle(args))
 
 
 if __name__ == "__main__":

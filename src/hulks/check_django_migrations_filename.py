@@ -1,15 +1,16 @@
 import re
 import sys
 from pathlib import Path
+from typing import Any, Dict, Final, NoReturn, Optional, Sequence
 
 from hulks.base import BaseHook
 
 
 class DjangoMigrationFilenameHook(BaseHook):
-    MIGRATIONS_DEFAULT_FILES_PATTERN = r".*\d{4}_\w+_\d{8}_\d{4}"
-    CAMEL_CASE_PATTERN = r"^\d{4}_([A-Z]|[a-z])+[A-Z]+"
+    MIGRATIONS_DEFAULT_FILES_PATTERN: Final[str] = r".*\d{4}_\w+_\d{8}_\d{4}"
+    CAMEL_CASE_PATTERN: Final[str] = r"^\d{4}_([A-Z]|[a-z])+[A-Z]+"
 
-    def validate(self, filename, **options):
+    def validate(self, filename: str, **options: Dict[str, Any]) -> bool:
         filepath = Path(filename)
 
         if re.match(self.MIGRATIONS_DEFAULT_FILES_PATTERN, filepath.name):
@@ -23,7 +24,7 @@ class DjangoMigrationFilenameHook(BaseHook):
         return True
 
 
-def main(args=None):
+def main(args: Optional[Sequence[str]] = None) -> NoReturn:
     """Checks if django migrations files are named correctly"""
     hook = DjangoMigrationFilenameHook()
     sys.exit(hook.handle(args))

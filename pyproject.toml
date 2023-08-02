@@ -49,6 +49,12 @@ known_localfolder = ["hulks", "tests"]
 sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
 default_section = "THIRDPARTY"
 
+[tool.mypy]
+strict = true
+disallow_any_unimported = true
+show_traceback = true
+python_version = "3.8"
+
 [tool.hatch.version]
 source = "vcs"
 
