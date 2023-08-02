@@ -18,11 +18,6 @@ class UnicodeErrorRaiserIO(BytesIO):
 
 
 @pytest.fixture
-def hook():
-    return BaseHook()
-
-
-@pytest.fixture
 def hook_iterator():
     class _TestHook(BaseHook):
         def validate(self, filename):
@@ -34,59 +29,63 @@ def hook_iterator():
     return _TestHook()
 
 
-@pytest.fixture
-def hook_with_option():
-    class _TestHook(BaseHook):
-        def add_arguments(self, parser):
-            parser.add_argument("foobar")
-
-    return _TestHook()
-
-
-def test_base_handle(hook):
-    mock_validate = mock.Mock(return_value=True)
-    hook.validate = mock_validate
+def test_base_handle():
+    class AlwaysValidHook(BaseHook):
+        def validate(self, filename, **options):
+            return True
 
     args = ["file01.txt", "another/file02.txt", "file03.txt"]
+    hook = AlwaysValidHook()
 
-    result = hook.handle(args)
-    assert result == SO_SUCCESS
-    assert mock_validate.call_count == 3
-
-
-def test_base_handle_failure(hook):
-    mock_validate = mock.Mock(side_effect=lambda filename: filename != "file03.txt")
-    hook.validate = mock_validate
-
-    args = ["file01.txt", "another/file02.txt", "file03.txt"]
-
-    result = hook.handle(args)
-    assert result == SO_ERROR
-    assert mock_validate.call_count == 3
+    assert hook.handle(args) == SO_SUCCESS
 
 
-def test_base_handle_multiple_failure(hook):
-    mock_validate = mock.Mock(side_effect=lambda filename: filename != "file01.txt")
-    hook.validate = mock_validate
+def test_base_handle_failure():
+    class OneInvalidHook(BaseHook):
+        def validate(self, filename, **options):
+            return filename != "file03.txt"
 
     args = ["file01.txt", "another/file02.txt", "file03.txt"]
+    hook = OneInvalidHook()
 
-    result = hook.handle(args)
-    assert result == SO_ERROR
-    assert mock_validate.call_count == 3
+    assert hook.handle(args) == SO_ERROR
 
 
-def test_base_handle_calls(hook):
-    hook.validate = mock.Mock(return_value=True)
+def test_base_handle_multiple_failure():
+    class MultipleInvalidHook(BaseHook):
+        def validate(self, filename, **options):
+            return filename != "file01.txt"
+
+    args = ["file01.txt", "another/file02.txt", "file03.txt"]
+    hook = MultipleInvalidHook()
+
+    assert hook.handle(args) == SO_ERROR
+
+
+def test_base_handle_calls():
+    class MockHook(BaseHook):
+        validate = mock.Mock(return_value=True)
+
+    hook = MockHook()
+
     result = hook.handle(["foobar.txt"])
+
     hook.validate.assert_called_once_with("foobar.txt")
     assert result == SO_SUCCESS
 
 
-def test_base_handle_calls_with_option(hook_with_option):
-    hook_with_option.validate = mock.Mock(return_value=True)
-    result = hook_with_option.handle(["foobar.txt", "flango"])
-    hook_with_option.validate.assert_called_once_with("foobar.txt", foobar="flango")
+def test_base_handle_calls_with_option():
+    class MockHook(BaseHook):
+        validate = mock.Mock(return_value=True)
+
+        def add_arguments(self, parser):
+            parser.add_argument("foobar")
+
+    hook = MockHook()
+
+    result = hook.handle(["foobar.txt", "flango"])
+
+    hook.validate.assert_called_once_with("foobar.txt", foobar="flango")
     assert result == SO_SUCCESS
 
 
