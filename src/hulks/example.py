@@ -1,10 +1,11 @@
 import sys
+from typing import Any, Dict, NoReturn, Optional, Sequence
 
 from hulks.base import BaseHook
 
 
 class ExampleHook(BaseHook):
-    def validate(self, filename, **options):
+    def validate(self, filename: str, **options: Dict[str, Any]) -> bool:
         retval = True
         for lino, line in self.lines_iterator(filename):
             if "batman" in line:
@@ -16,7 +17,7 @@ class ExampleHook(BaseHook):
         return retval
 
 
-def main(args=None):
+def main(args: Optional[Sequence[str]] = None) -> NoReturn:
     """Example hulk"""
     hook = ExampleHook()
     sys.exit(hook.handle(args))

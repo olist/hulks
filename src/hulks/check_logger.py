@@ -1,15 +1,16 @@
 import re
 import sys
+from typing import Any, Dict, NoReturn, Optional, Sequence
 
 from hulks.base import BaseHook
 
 
 class CheckLoggerHook(BaseHook):
-    def _show_error_message(self, filename, line_number):
+    def _show_error_message(self, filename: str, line_number: int) -> None:
         msg = "{}, line={}: preferably logger should be set with __name__"
         print(msg.format(filename, line_number))
 
-    def validate(self, filename, **options):
+    def validate(self, filename: str, **options: Dict[str, Any]) -> bool:
         retval = True
         pattern = re.compile(r"\((.+)\)")
         for lino, line in self.lines_iterator(filename):
@@ -39,7 +40,7 @@ class CheckLoggerHook(BaseHook):
         return retval
 
 
-def main(args=None):
+def main(args: Optional[Sequence[str]] = None) -> NoReturn:
     """Checks 'getLogger' usage"""
     hook = CheckLoggerHook()
     sys.exit(hook.handle(args))

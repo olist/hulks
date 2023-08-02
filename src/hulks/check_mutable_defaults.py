@@ -1,20 +1,19 @@
 import ast
 import sys
+from typing import Any, Dict, Iterable, List, NoReturn, Optional, Sequence, Union, cast
 
 from hulks.base import BaseHook
 
 _immutable_builtins = ("bool", "float", "frozenset", "int", "object", "str", "tuple")
 _ast_mutable_types = (ast.List, ast.Set, ast.Dict)
-try:
-    _assigns = (ast.AnnAssign, ast.Assign)
-except AttributeError:
-    # AnnAssign only exists on python>=3.6
-    _assigns = (ast.Assign,)
+_assigns = (ast.AnnAssign, ast.Assign)
 
 
 class CheckMutableDefaults(BaseHook):
-    def _collect_functions_with_defaults(self, tree):
-        nodes = []
+    def _collect_functions_with_defaults(
+        self, tree: ast.Module
+    ) -> Iterable[Union[ast.FunctionDef, ast.AsyncFunctionDef]]:
+        nodes: List[Union[ast.FunctionDef, ast.AsyncFunctionDef]] = []
         for node in ast.walk(tree):
             if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 continue
@@ -24,7 +23,7 @@ class CheckMutableDefaults(BaseHook):
 
         return nodes
 
-    def _collect_class_attributes(self, tree):
+    def _collect_class_attributes(self, tree: ast.Module) -> Iterable[ast.AST]:
         nodes = []
         for node in ast.walk(tree):
             if not isinstance(node, ast.ClassDef):
@@ -34,22 +33,21 @@ class CheckMutableDefaults(BaseHook):
 
         return nodes
 
-    def _check_mutable_value(self, value):
+    def _check_mutable_value(self, value: Optional[ast.AST]) -> bool:
         if isinstance(value, ast.Tuple) and any(self._check_mutable_value(elt) for elt in value.elts):
             return True
 
         if isinstance(value, _ast_mutable_types):
             return True
 
-        try:
+        if isinstance(value, ast.Call) and isinstance(value.func, ast.Name):
             return value.func.id not in _immutable_builtins
-        except AttributeError as exc:
-            if isinstance(value, ast.Call) and not isinstance(value.func, ast.Attribute):
-                raise exc
 
         return False
 
-    def _check_function_node_mutability(self, filename, node):
+    def _check_function_node_mutability(
+        self, filename: str, node: Union[ast.FunctionDef, ast.AsyncFunctionDef]
+    ) -> bool:
         retval = True
         for default_arg_value in node.args.defaults:
             if self._check_mutable_value(default_arg_value):
@@ -59,21 +57,19 @@ class CheckMutableDefaults(BaseHook):
 
         return retval
 
-    def _check_functions(self, parsed, filename):
+    def _check_functions(self, parsed: ast.Module, filename: str) -> bool:
         fn_nodes = self._collect_functions_with_defaults(parsed)
         return all(self._check_function_node_mutability(filename, node) for node in fn_nodes)
 
-    def _check_assign_node_mutability(self, filename, node):
+    def _check_assign_node_mutability(self, filename: str, node: Union[ast.AnnAssign, ast.Assign]) -> bool:
         if not self._check_mutable_value(node.value):
             return True
 
         if not self.strict:
             return True
 
-        try:
-            name = node.targets[0].id
-        except AttributeError:
-            name = node.target.id
+        target = node.targets[0] if isinstance(node, ast.Assign) else node.target
+        name = cast(ast.Name, target).id
 
         if isinstance(name, bytes):
             name = name.decode()
@@ -85,17 +81,21 @@ class CheckMutableDefaults(BaseHook):
         print(msg.format(filename, node.lineno, node.col_offset, name))
         return False
 
-    def _check_classes(self, parsed, filename):
+    def _check_classes(self, parsed: ast.Module, filename: str) -> bool:
         cls_nodes = self._collect_class_attributes(parsed)
-        return all(self._check_assign_node_mutability(filename, node) for node in cls_nodes)
+        return all(
+            self._check_assign_node_mutability(filename, node)
+            for node in cls_nodes
+            if isinstance(node, _assigns)
+        )
 
-    def validate(self, filename, **options):
+    def validate(self, filename: str, **options: Dict[str, Any]) -> bool:
         self.strict = options.get("strict", False)
         parsed = ast.parse(open(filename).read(), filename)
         return self._check_classes(parsed, filename) and self._check_functions(parsed, filename)
 
 
-def main(args=None):
+def main(args: Optional[Sequence[str]] = None) -> NoReturn:
     """Check mutable defaults arguments in python code"""
     hook = CheckMutableDefaults()
     sys.exit(hook.handle(args))
